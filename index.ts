@@ -41,7 +41,7 @@ function getSearchInsertFunc(mark:string|Buffer, fConcat:(contents:Buffer,index:
     if (index >= 0) { // found that mark, do the concat
       file.contents = fConcat(contents, index, markBuffer, separator, readInContent)
     } else if (!opt.ignoreMissingMark) {     // mark missing
-      cb('Unable to find insert mark in file '+file.path)
+      return cb('gulp-append-prepend-dir: Unable to find insert mark in file '+file.path)
     } // else ignore and do nothing
   }
 }
@@ -120,7 +120,7 @@ function getTransform (dir:string,mix:MixFunction,options:options) {
       return cb(null, file);
     }
     if (file.isStream()) {
-      return cb('Streams not supported!');
+      return cb('gulp-append-prepend-dir: Streams not supported!');
     }
     if (file.isBuffer()) {
       if (opt.useRelative) {
@@ -129,7 +129,7 @@ function getTransform (dir:string,mix:MixFunction,options:options) {
           mix(file,fs.readFileSync(relativePath),separator,opt,cb);
         } else {
           if (!opt.ignoreMissingFile) {
-            return cb('Cannot find file '+relativePath)
+            return cb('gulp-append-prepend-dir: Cannot find file '+relativePath)
           } // else nothing to do
         } 
       } else {
