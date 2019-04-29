@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "outDir": "build",
+        "target": "es5",
+        "module": "commonjs",
+        "lib": [
+            "es5",
+            "es2015.promise"
+        ],
+        "sourceMap": true,
+        "declaration": true,
+    },
+    "include": [
+        "**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+        "build"
+    ]    
+}
