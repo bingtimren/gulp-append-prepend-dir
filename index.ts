@@ -12,7 +12,7 @@ interface options {
   ignoreMissingMark?: boolean
 }
 
-type MixFunction = (file:Vinyl,readInContent:Buffer,separator:Buffer, options:options) => void 
+type MixFunction = (file:Vinyl,readInContent:Buffer,separator:Buffer, options:options, cb:through.TransformCallback) => void 
 
 const defaultOptions:options = {
   ignoreMissingFile: true,
@@ -35,13 +35,13 @@ let prependMixIn:MixFunction = function( file: Vinyl, readInContent:Buffer,separ
  */
 function getSearchInsertFunc(mark:string|Buffer, fConcat:(contents:Buffer,index:number,markBuffer:Buffer,separator:Buffer, readInContent:Buffer)=>Buffer) {
   let markBuffer = asBuffer(mark)
-  return function( file: Vinyl, readInContent:Buffer,separator:Buffer,opt:options){
+  return function( file: Vinyl, readInContent:Buffer,separator:Buffer,opt:options,cb:through.TransformCallback){
     let contents = file.contents as Buffer
     let index = contents.indexOf(markBuffer)
     if (index >= 0) { // found that mark, do the concat
       file.contents = fConcat(contents, index, markBuffer, separator, readInContent)
     } else if (!opt.ignoreMissingMark) {     // mark missing
-      throw 'Unable to find insert mark in file '+file.path
+      cb('Unable to find insert mark in file '+file.path)
     } // else ignore and do nothing
   }
 }
@@ -126,14 +126,14 @@ function getTransform (dir:string,mix:MixFunction,options:options) {
       if (opt.useRelative) {
         let relativePath = path.join(dir, file.relative)
         if (fs.existsSync(relativePath)) {
-          mix(file,fs.readFileSync(relativePath),separator,opt);
+          mix(file,fs.readFileSync(relativePath),separator,opt,cb);
         } else {
           if (!opt.ignoreMissingFile) {
             return cb('Cannot find file '+relativePath)
           } // else nothing to do
         } 
       } else {
-        mix(file,fixedBuffer as Buffer,separator,opt);
+        mix(file,fixedBuffer as Buffer,separator,opt,cb);
       }
       cb(null, file);
     }

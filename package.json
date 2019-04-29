@@ -1,6 +1,6 @@
 {
   "name": "gulp-append-prepend-dir",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Append or prepend the file content with the corresponding file in a dir",
   "license": "MIT",
   "author": {
