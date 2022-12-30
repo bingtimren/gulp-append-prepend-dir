@@ -32,7 +32,7 @@
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "istanbul": "^0.4.4",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "mocha-lcov-reporter": "^1.2.0",
     "vinyl": "^1.2.0"
   }
